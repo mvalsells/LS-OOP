@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Motivació",
+        "period": 10000,
+        "price": 10
+    },
+    {
+        "name": "Cafè",
+        "period": 2000,
+        "price": 100
+    },
+    {
+        "name": "Beguda energètica",
+        "period": 1000,
+        "price": 160
+    },
+    {
+        "name": "Ajuda del professor",
+        "period": 500,
+        "price": 250
+    },
+    {
+        "name": "Pressió per l'entrega",
+        "period": 100,
+        "price": 875
+    },
+    {
+        "name": "Auto-AC-Solver 3000",
+        "period": 25,
+        "price": 2500
+    }
+]
