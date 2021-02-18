@@ -13,10 +13,10 @@ public class Menu {
                 if (option >= 1 && option <= 4) {
                     intOk = true;
                 } else {
-                    System.err.println("Input introduced not corresponding to the menu");
+                    displayErr("Input introduced not corresponding to the menu");
                 }
             } catch (NumberFormatException e){
-                System.err.println("Input introduced not corresponding to the menu");
+                displayErr("Input introduced not corresponding to the menu");
             }
         } while (!intOk);
 
@@ -43,6 +43,11 @@ public class Menu {
     }
     public static void displayErr(String text){
         System.err.println(text);
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void exitText(int numAC){
@@ -91,7 +96,7 @@ public class Menu {
         sb.append(buyingSolver);
         sb.append("\". You have ");
         sb.append(numAC);
-        sb.append("ACs left");
+        sb.append(" ACs left");
         System.out.println(sb.toString());
     }
 }

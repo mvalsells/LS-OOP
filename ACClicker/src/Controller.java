@@ -32,7 +32,6 @@ public class Controller {
                     break;
                 case 3:
                     //Buy AC
-
                     if(storeAvailable){
                         ArrayList<String[]> solversInfo = new ArrayList<>();
                         for (Solver solver:solvers){
@@ -41,11 +40,24 @@ public class Controller {
                         }
                         String buyingSolver = Menu.store(solversInfo);
                         if(!buyingSolver.equals("")){
+                            boolean solverNotFound = true;
                             for (Solver solver:solvers){
                                 if (solver.getName().equalsIgnoreCase(buyingSolver)){
-                                    //TODO check if enough ACs to buy
-                                    Menu.storeBoughtOK(buyingSolver, numAC);
+                                    solverNotFound = false;
+                                    if(solver.getPrice()<=numAC) {
+                                        synchronized (Solver.class){
+                                            numAC=numAC-solver.getPrice();
+                                        }
+                                        Menu.storeBoughtOK(buyingSolver, numAC);
+                                        new Thread(solver).start();
+                                    } else {
+                                        Menu.displayErr("You don't have enough ACs to buy this solver");
+                                    }
+                                    break;
                                 }
+                            }
+                            if (solverNotFound) {
+                                Menu.displayErr("Please enter a solver from the list.");
                             }
                         }
                     } else {
@@ -63,7 +75,8 @@ public class Controller {
     }
 
     public static void incrementAC(){
-        //TODO syncornized method
-        numAC++;
+        synchronized (Solver.class) {
+            numAC++;
+        }
     }
 }
