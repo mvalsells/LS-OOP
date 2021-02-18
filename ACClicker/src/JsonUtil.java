@@ -7,9 +7,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class JsonUtil {
-    public static ArrayList<StoreElement> readStoreElements() throws FileNotFoundException {
+    public static ArrayList<Solver> readSolvers() throws FileNotFoundException {
         String jsonText = FileUtil.readTextFile("datasets/store.json");
-        ArrayList<StoreElement> storeElements = new ArrayList<>();
+        ArrayList<Solver> solvers = new ArrayList<>();
 
         JsonArray data = JsonParser.parseString(jsonText).getAsJsonArray();
 
@@ -19,9 +19,9 @@ public class JsonUtil {
             int period = jsonObject.get("period").getAsInt();
             int price = jsonObject.get("price").getAsInt();
 
-            StoreElement storeElement = new StoreElement(name, period, price);
-            storeElements.add(storeElement);
+            Solver storeElement = new Solver(name, period, price);
+            solvers.add(storeElement);
         }
-        return storeElements;
+        return solvers;
     }
 }

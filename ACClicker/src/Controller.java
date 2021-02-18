@@ -2,17 +2,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Controller {
-    private int numAC;
+    private static int numAC=0;
 
-    public Controller(){
-        numAC=0;
-    }
-
-    public void exec() {
-        ArrayList<StoreElement> storeElements = null;
+    public static void exec() {
+        ArrayList<Solver> solvers = null;
         boolean storeAvailable;
         try {
-            storeElements = JsonUtil.readStoreElements();
+            solvers = JsonUtil.readSolvers();
             storeAvailable = true;
             System.out.println("File store.json load correctly!");
 
@@ -24,38 +20,50 @@ public class Controller {
         int option;
         do {
             option = Menu.showMain(storeAvailable);
-            StringBuilder sb = new StringBuilder();
             switch (option) {
                 case 1:
                     //Add AC
-                    //TODO Implement option 1
-                    System.out.println("Option 1");
+                    incrementAC();
+                    Menu.solveAC(numAC);
                     break;
                 case 2:
                     //Show total AC
-                    sb.append("Until now ");
-                    sb.append(numAC);
-                    sb.append(" ACs have been solved. Good work!");
-                    Menu.display(sb.toString());
-                    //TODO Show bought items
+                    Menu.viewState(numAC);
                     break;
                 case 3:
                     //Buy AC
+
                     if(storeAvailable){
-                        //TODO implement store
-                        System.out.println("Implement store");
+                        ArrayList<String[]> solversInfo = new ArrayList<>();
+                        for (Solver solver:solvers){
+                            String[] solverInfo = {solver.getName(), String.valueOf(solver.getPrice())};
+                            solversInfo.add(solverInfo);
+                        }
+                        String buyingSolver = Menu.store(solversInfo);
+                        if(!buyingSolver.equals("")){
+                            for (Solver solver:solvers){
+                                if (solver.getName().equalsIgnoreCase(buyingSolver)){
+                                    //TODO check if enough ACs to buy
+                                    Menu.storeBoughtOK(buyingSolver, numAC);
+                                }
+                            }
+                        }
                     } else {
-                        System.err.println("Store not available.");
+                        Menu.displayErr("Store not available.");
                     }
+
                     break;
                 case 4:
                     //Exit
-                    sb.append("Game Over! Final points: ");
-                    sb.append(numAC);
-                    sb.append(" ACs.");
+                    Menu.exitText(numAC);
                     System.exit(0);
                     break;
             }
         } while (option!=4);
+    }
+
+    public static void incrementAC(){
+        //TODO syncornized method
+        numAC++;
     }
 }
