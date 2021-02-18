@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 public class Controller {
     private static int numAC=0;
-
     public static void exec() {
         ArrayList<Solver> solvers = null;
         boolean storeAvailable;
@@ -28,26 +27,36 @@ public class Controller {
                     break;
                 case 2:
                     //Show total AC
-                    Menu.viewState(numAC);
+                    ArrayList<String[]> solversBoughtInfo = new ArrayList<>();
+                    for (Solver solver : solvers) {
+                        int timesBought = solver.getTimesBought();
+                        if (timesBought>0) {
+                            solversBoughtInfo.add(new String[]{solver.getName(), String.valueOf(timesBought)});
+                        }
+                    }
+                    Menu.viewState(numAC, solversBoughtInfo);
                     break;
                 case 3:
                     //Buy AC
                     if(storeAvailable){
                         ArrayList<String[]> solversInfo = new ArrayList<>();
                         for (Solver solver:solvers){
-                            String[] solverInfo = {solver.getName(), String.valueOf(solver.getPrice())};
-                            solversInfo.add(solverInfo);
+                            if (solver.getPrice()<=numAC) {
+                                String[] solverInfo = {solver.getName(), String.valueOf(solver.getPrice())};
+                                solversInfo.add(solverInfo);
+                            }
                         }
                         String buyingSolver = Menu.store(solversInfo);
                         if(!buyingSolver.equals("")){
                             boolean solverNotFound = true;
-                            for (Solver solver:solvers){
-                                if (solver.getName().equalsIgnoreCase(buyingSolver)){
+                            for (Solver solver : solvers) {
+                                if (solver.getName().equalsIgnoreCase(buyingSolver)) {
                                     solverNotFound = false;
-                                    if(solver.getPrice()<=numAC) {
-                                        synchronized (Solver.class){
-                                            numAC=numAC-solver.getPrice();
+                                    if (solver.getPrice() <= numAC) {
+                                        synchronized (Solver.class) {
+                                            numAC = numAC - solver.getPrice();
                                         }
+                                        solver.bought();
                                         Menu.storeBoughtOK(buyingSolver, numAC);
                                         new Thread(solver).start();
                                     } else {
@@ -71,7 +80,8 @@ public class Controller {
                     System.exit(0);
                     break;
             }
-        } while (option!=4);
+            Menu.display("------------------------------------------------");
+        } while (true);
     }
 
     public static void incrementAC(){

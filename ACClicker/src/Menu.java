@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
     public static int showMain(boolean storeAvailable){
         boolean intOk = false;
         int option=0;
@@ -73,11 +73,22 @@ public class Menu {
         return scanner.nextLine();
     }
 
-    public static void viewState(int numAC) {
+    public static void viewState(int numAC, ArrayList<String[]> solversBought) {
         StringBuilder sb = new StringBuilder();
         sb.append("Until now ");
         sb.append(numAC);
-        sb.append(" ACs have been solved. Good work!");
+        sb.append(" ACs have been solved. Good work!\n");
+        if (solversBought.size()>0){
+            sb.append("The following solvers have been bought:");
+            for (String[] solverInfo : solversBought){
+                sb.append("\n\t");
+                sb.append(solverInfo[1]);
+                sb.append("x ");
+                sb.append(solverInfo[0]);
+            }
+        } else {
+            sb.append("None solvers have been bought.");
+        }
         System.out.println(sb.toString());
         //TODO Show bought items
     }
